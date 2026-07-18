@@ -32,3 +32,16 @@ test('has gym warmup images for both presenters', () => {
 
   expect(missing).toEqual([])
 })
+
+test('has resistance-band images for both presenters', () => {
+  const ids = [
+    'band-shoulders-preparation', 'band-shoulders-row', 'band-shoulders-pulldown',
+    'band-shoulders-external-rotation', 'band-shoulders-reverse-fly',
+    'band-shoulders-face-pull', 'band-shoulders-finish',
+  ]
+  const missing = ids.flatMap((id) => presenters
+    .map((presenter) => `public${getStepImage(id, presenter)}`)
+    .filter((path) => !existsSync(resolve(path))))
+
+  expect(missing).toEqual([])
+})

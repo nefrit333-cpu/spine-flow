@@ -318,3 +318,30 @@ for (const { id: presenter, name } of coreBackPresenters) {
     await page.screenshot({ path: `output/playwright/spine-flow-gym-warmup-${presenter}-375.png`, fullPage: false, scale: 'css' })
   })
 }
+
+for (const { id: presenter, name } of coreBackPresenters) {
+  test(`opens the resistance-band practice with ${presenter} images`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto('/')
+    await acknowledgeSafety(page)
+    await selectPresenter(page, name)
+    await page.getByRole('button', { name: /Средний/ }).click()
+    await page.getByRole('button', { name: '6 минут: плечи и спина с жгутом' }).click()
+
+    const visual = page.locator('.practice-visual img').last()
+    await expect(page.getByText('Шаг 1 из 7', { exact: true })).toBeVisible()
+    await expect(visual).toHaveAttribute('src', `/images/${presenter}/band-shoulders-preparation.webp`)
+    await expectImageLoaded(visual)
+
+    for (let index = 0; index < 3; index += 1) {
+      await page.getByRole('button', { name: 'Следующий шаг' }).click()
+    }
+    await expect(page.getByRole('heading', { name: 'Внешняя ротация плеча' })).toBeVisible()
+    await expect(page.locator('.practice-content p')).toContainText('Через 30 секунд смените сторону')
+    await expect(visual).toHaveAttribute('src', `/images/${presenter}/band-shoulders-external-rotation.webp`)
+    await expectImageLoaded(visual)
+    await page.evaluate(() => window.scrollTo(0, 0))
+    await expectInViewport(page, visual)
+    await page.screenshot({ path: `output/playwright/spine-flow-band-shoulders-${presenter}-375.png`, fullPage: false, scale: 'css' })
+  })
+}

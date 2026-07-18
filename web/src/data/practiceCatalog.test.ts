@@ -21,7 +21,7 @@ test('contains the exact thirteen-minute core practice contract', () => {
   const intermediate = getPracticesByLevel('intermediate')
   const core = intermediate.find((practice) => practice.id === 'core-back')
 
-  expect(intermediate).toHaveLength(3)
+  expect(intermediate).toHaveLength(4)
   expect(core?.steps.map(({ id, title, durationSeconds }) => ({ id, title, durationSeconds }))).toEqual([
     { id: 'core-preparation', title: 'Подготовка', durationSeconds: 30 },
     { id: 'core-cat-cow', title: 'Кошка-корова', durationSeconds: 90 },
@@ -46,7 +46,7 @@ test('contains the complete fifteen-minute intermediate practice', () => {
   const intermediatePractices = getPracticesByLevel('intermediate')
   const [practice] = intermediatePractices
 
-  expect(getPracticesByLevel('intermediate')).toHaveLength(3)
+  expect(getPracticesByLevel('intermediate')).toHaveLength(4)
   expect(practice.id).toBe('strength-mobility')
   expect(practice.level).toBe('intermediate')
   expect(practice.title).toBe('15 минут: сила и подвижность')
@@ -103,6 +103,28 @@ test('contains the approved fifteen-minute gym warmup without boundary steps', (
   expect(practice?.steps.every((step) => step.durationSeconds === 60)).toBe(true)
   expect(practice?.steps.reduce((sum, step) => sum + step.durationSeconds, 0)).toBe(900)
   expect(practice?.steps.map((step) => step.title)).not.toEqual(expect.arrayContaining(['Подготовка', 'Завершение практики']))
+})
+
+test('contains the approved six-minute resistance-band practice', () => {
+  const practice = practices.find((item) => item.id === 'band-shoulders')
+
+  expect(practice).toMatchObject({
+    level: 'intermediate',
+    title: '6 минут: плечи и спина с жгутом',
+    subtitle: 'Контроль плеч и лопаток с лёгким сопротивлением',
+    accent: 'blue',
+  })
+  expect(practice?.steps.map(({ id, title, durationSeconds }) => ({ id, title, durationSeconds }))).toEqual([
+    { id: 'band-shoulders-preparation', title: 'Подготовка', durationSeconds: 30 },
+    { id: 'band-shoulders-row', title: 'Тяга к поясу', durationSeconds: 60 },
+    { id: 'band-shoulders-pulldown', title: 'Тяга прямыми руками сверху', durationSeconds: 60 },
+    { id: 'band-shoulders-external-rotation', title: 'Внешняя ротация плеча', durationSeconds: 60 },
+    { id: 'band-shoulders-reverse-fly', title: 'Разведение рук в наклоне', durationSeconds: 60 },
+    { id: 'band-shoulders-face-pull', title: 'Тяга к лицу', durationSeconds: 60 },
+    { id: 'band-shoulders-finish', title: 'Завершение практики', durationSeconds: 30 },
+  ])
+  expect(practice?.steps.reduce((sum, step) => sum + step.durationSeconds, 0)).toBe(360)
+  expect(practice?.steps.find((step) => step.id === 'band-shoulders-external-rotation')?.instruction).toContain('30 секунд')
 })
 
 test('keeps the approved two-minute side plank as the only extended exercise', () => {
