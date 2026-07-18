@@ -1,0 +1,16 @@
+# Local agent and editor state
+.agent-work/
+.agents/
+.serena/
+.superpowers/
+
+# Generated web artifacts and local deployments
+web/node_modules/
+web/dist/
+web/output/
+web/artifacts/
+web/test-results/
+web/.vercel/
+
+# PNG master images are kept locally; the app ships optimized WebP copies.
+web/public/images/**/*.png
