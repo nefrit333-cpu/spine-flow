@@ -1,0 +1,40 @@
+name: Предложение
+description: Предложите улучшение для Spine Flow.
+title: "[Предложение]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Опишите задачу пользователя, а не только желаемую кнопку или экран.
+  - type: textarea
+    id: need
+    attributes:
+      label: Какую потребность решает предложение?
+      placeholder: Во время практики мне сложно понять, сколько времени осталось до её завершения.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Ваше предложение
+      placeholder: Добавить понятный индикатор общего прогресса практики.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Рассмотренные варианты
+      description: Необязательно. Укажите, какие решения уже пробовали или почему они не подошли.
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Для кого это улучшение?
+      options:
+        - Для большинства пользователей
+        - Для пользователей iPhone
+        - Для начинающих
+        - Для среднего уровня
+        - Для разработчиков проекта
+        - Другое
+    validations:
+      required: true

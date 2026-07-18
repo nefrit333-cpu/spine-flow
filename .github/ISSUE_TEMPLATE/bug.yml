@@ -1,0 +1,54 @@
+name: Сообщение об ошибке
+description: Помогите воспроизвести и исправить проблему в Spine Flow.
+title: "[Баг]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо за сообщение. Не указывайте пароли, коды, номера карт и другие личные данные.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Что произошло?
+      description: Кратко опишите фактический результат.
+      placeholder: Таймер остановился на 0:01 и не переключился на следующий шаг.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Как повторить ошибку?
+      description: Укажите последовательность действий от открытия приложения.
+      placeholder: |
+        1. Открыл(а) практику ...
+        2. Нажал(а) ...
+        3. Увидел(а) ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Какой результат ожидался?
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: Где возникла ошибка?
+      options:
+        - iPhone в установленной PWA
+        - iPhone в Safari
+        - Компьютерный браузер
+        - Другое устройство
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Версия браузера или iOS
+      placeholder: Например, iOS 18.5 / Safari
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Скриншот или видео
+      description: Перетащите файл сюда, если он поможет понять проблему. Не публикуйте личные данные.

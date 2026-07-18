@@ -1,0 +1,36 @@
+name: Рабочая задача
+description: Зафиксируйте понятную задачу для развития проекта.
+title: "[Задача]: "
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Цель
+      description: Какой результат должен быть получен и зачем он нужен?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Границы задачи
+      description: Что входит в работу, а что явно не входит?
+      placeholder: |
+        Входит: ...
+        Не входит: ...
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Критерии готовности
+      description: По каким наблюдаемым признакам задачу можно считать завершённой?
+      placeholder: |
+        - ...
+        - ...
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Риски и зависимости
+      description: Необязательно. Укажите внешние доступы, контент, устройства или решения, без которых задачу нельзя завершить.
