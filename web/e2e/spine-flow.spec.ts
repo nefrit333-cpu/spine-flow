@@ -81,6 +81,60 @@ test('selects and remembers the female presenter', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Выберите уровень' })).toBeVisible()
 })
 
+test('opens a practice from a deep link and returns through browser history', async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('spine-flow-presenter', 'female')
+    localStorage.setItem('spine-flow.safety', 'true')
+  })
+
+  await page.goto('/#/practice/beginner/neck')
+  await expect(page.locator('.practice-page')).toBeVisible()
+  await expect(page).toHaveURL(/#\/practice\/beginner\/neck$/)
+
+  await page.goto('/#/home/beginner')
+  await page.locator('.featured-practice .button').click()
+  await expect(page).toHaveURL(/#\/practice\/beginner\/neck$/)
+  await page.goBack()
+  await expect(page).toHaveURL(/#\/home\/beginner$/)
+  await expect(page.locator('.featured-practice')).toBeVisible()
+})
+
+test('continues a deep link after first-time presenter selection', async ({ page }) => {
+  await page.goto('/#/practice/beginner/neck')
+  await acknowledgeSafety(page)
+  await selectPresenter(page, 'Девушка')
+
+  await expect(page).toHaveURL(/#\/practice\/beginner\/neck$/)
+  await expect(page.locator('.practice-page')).toBeVisible()
+})
+
+test('opens public information from iPhone settings and returns through history', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto('/')
+  await acknowledgeSafety(page)
+  await selectPresenter(page, 'Девушка')
+  await page.getByRole('button', { name: 'Настройки' }).click()
+  await expect(page).toHaveURL(/#\/settings$/)
+  await page.getByRole('button', { name: 'Поддержка' }).click()
+  await expect(page).toHaveURL(/#\/support$/)
+  await expect(page.getByRole('link', { name: 'Написать в поддержку' })).toHaveAttribute('href', 'mailto:nefrit333@gmail.com')
+  await page.goBack()
+  await expect(page).toHaveURL(/#\/settings$/)
+  await page.getByRole('button', { name: 'Конфиденциальность' }).click()
+  await expect(page).toHaveURL(/#\/privacy$/)
+  await expect(page.getByText('В приложении нет аналитики, рекламы, трекеров, платежей и передачи персональных данных третьим лицам.')).toBeVisible()
+  await page.screenshot({ path: 'output/playwright/spine-flow-privacy-375.png', fullPage: true })
+})
+
+test('keeps the privacy heading inside a compact iPhone viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 })
+  await page.goto('/#/privacy')
+
+  const heading = page.getByRole('heading', { name: 'Конфиденциальность' })
+  await expect(heading).toBeVisible()
+  await expect.poll(() => heading.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true)
+})
+
 test('uses female images throughout a practice', async ({ page }) => {
   await page.goto('/')
   await acknowledgeSafety(page)
@@ -113,7 +167,7 @@ test('shows the revised male neck poses without clipping', async ({ page }) => {
   await page.screenshot({ path: 'output/playwright/spine-flow-male-neck-rest-375.png', fullPage: true })
 })
 
-test('uses male images and returns to presenter selection from settings', async ({ page }) => {
+test('uses male images and changes presenter from settings', async ({ page }) => {
   await page.goto('/')
   await acknowledgeSafety(page)
   await selectPresenter(page, 'Парень')
@@ -136,6 +190,7 @@ test('uses male images and returns to presenter selection from settings', async 
   await page.screenshot({ path: 'output/playwright/spine-flow-male-practice-375.png', fullPage: true })
   await page.getByRole('button', { name: 'Закрыть практику' }).click()
   await page.getByRole('button', { name: 'Настройки' }).click()
+  await page.getByRole('button', { name: 'Сменить персонажа' }).click()
   await expect(page.getByRole('button', { name: /Девушка/ })).toBeVisible()
 })
 

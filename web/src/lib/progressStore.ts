@@ -1,4 +1,5 @@
 import type { UserProgress } from '../domain/practice'
+import { clearPresenter } from './presenterStore'
 
 const progressKey = 'spine-flow.progress'
 const safetyKey = 'spine-flow.safety'
@@ -36,4 +37,14 @@ export function hasAcknowledgedSafety(): boolean {
 
 export function acknowledgeSafety(): void {
   try { window.localStorage.setItem(safetyKey, 'true') } catch { return }
+}
+
+export function clearLocalAppData(): void {
+  try {
+    clearPresenter()
+    window.localStorage.removeItem(progressKey)
+    window.localStorage.removeItem(safetyKey)
+  } catch {
+    return
+  }
 }

@@ -10,7 +10,7 @@ interface LevelSelectPageProps {
   readonly activeSection: FooterSection
   readonly onLevelSelect: (level: PracticeLevel) => void
   readonly onSectionChange: (section: FooterSection) => void
-  readonly onChangePresenter: () => void
+  readonly onOpenSettings: () => void
 }
 
 const secondaryTitles: Readonly<Record<Exclude<FooterSection, 'home'>, string>> = {
@@ -25,12 +25,12 @@ const levelStepImages: Readonly<Record<DifficultyCard['id'], string>> = {
   advanced: 'core-side-plank-right',
 }
 
-export function LevelSelectPage({ presenter, activeSection, onLevelSelect, onSectionChange, onChangePresenter }: LevelSelectPageProps): JSX.Element {
+export function LevelSelectPage({ presenter, activeSection, onLevelSelect, onSectionChange, onOpenSettings }: LevelSelectPageProps): JSX.Element {
   return (
     <main className="app-shell level-select-page">
       <header className="topbar">
         <h1>Spine Flow</h1>
-        <button className="icon-button topbar-button" type="button" aria-label="Настройки" onClick={onChangePresenter}>
+        <button className="icon-button topbar-button" type="button" aria-label="Настройки" onClick={onOpenSettings}>
           <Settings size={23} />
         </button>
       </header>

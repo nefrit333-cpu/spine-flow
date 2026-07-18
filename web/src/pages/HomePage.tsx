@@ -7,9 +7,9 @@ import { PracticeCard } from '../components/PracticeCard'
 import { FooterNav, type FooterSection } from '../components/FooterNav'
 import type { Presenter } from '../domain/presenter'
 
-interface HomePageProps { readonly presenter: Presenter; readonly level: PracticeLevel; readonly progress: UserProgress; readonly onOpen: (id: string) => void; readonly activeSection: FooterSection; readonly onSectionChange: (section: FooterSection) => void; readonly onChangePresenter: () => void }
+interface HomePageProps { readonly presenter: Presenter; readonly level: PracticeLevel; readonly progress: UserProgress; readonly onOpen: (id: string) => void; readonly activeSection: FooterSection; readonly onSectionChange: (section: FooterSection) => void; readonly onOpenSettings: () => void }
 
-export function HomePage({ presenter, level, progress, onOpen, activeSection, onSectionChange, onChangePresenter }: HomePageProps): JSX.Element {
+export function HomePage({ presenter, level, progress, onOpen, activeSection, onSectionChange, onOpenSettings }: HomePageProps): JSX.Element {
   const practices = getPracticesByLevel(level)
   const recommendedPractice = getRecommendedPractice(level)
   const featuredStep = level === 'intermediate' ? recommendedPractice.steps[0] : recommendedPractice.steps[1]
@@ -20,7 +20,7 @@ export function HomePage({ presenter, level, progress, onOpen, activeSection, on
     progress: { title: 'Прогресс', text: `Завершено практик: ${progress.completedCount}` },
   }
   return <main className="app-shell">
-    <header className="topbar"><h1>Spine Flow</h1><button className="icon-button topbar-button" aria-label="Настройки" onClick={onChangePresenter}><Settings size={23} /></button></header>
+    <header className="topbar"><h1>Spine Flow</h1><button className="icon-button topbar-button" aria-label="Настройки" onClick={onOpenSettings}><Settings size={23} /></button></header>
     {activeSection === 'home' ? <><section className="section"><h2>Сегодня</h2>
       <article className="featured-practice">
         <div className="featured-copy"><h3>{recommendedPractice.title}</h3><p>{recommendedPractice.subtitle}</p><span className="duration"><span aria-hidden="true">◷</span> {getDurationMinutes(recommendedPractice)} мин</span><button className="button button-primary" onClick={() => onOpen(recommendedPractice.id)}><Play size={19} fill="currentColor" />Начать</button></div>

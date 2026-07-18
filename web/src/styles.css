@@ -2,6 +2,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; background: #fff; color: #183b2b; }
 button { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
 button:focus-visible { outline: 3px solid #d97962; outline-offset: 3px; }
 .app-shell { width: min(100%, 480px); min-height: 100dvh; margin: 0 auto; padding: max(24px, env(safe-area-inset-top)) 20px max(28px, env(safe-area-inset-bottom)); background: #fff; }
 .topbar, .practice-topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -58,3 +59,18 @@ button:focus-visible { outline: 3px solid #d97962; outline-offset: 3px; }
 .level-card:not(:disabled):active { transform: scale(.985); }
 .level-card-locked { filter: saturate(.5); cursor: not-allowed; }
 .level-card-locked img { opacity: .62; }
+
+.page-topbar { display: flex; flex-wrap: wrap; align-items: center; gap: 26px; margin-bottom: 48px; }
+.page-topbar h1 { flex: 1 0 100%; margin: 0; color: #164631; font: 400 clamp(1.8rem, 8vw, 2.8rem)/.98 Georgia, "Times New Roman", serif; overflow-wrap: anywhere; }
+.page-topbar-spacer { display: none; }
+.settings-list { border-top: 1px solid #e1e8e2; }
+.settings-row { display: flex; width: 100%; min-height: 62px; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 2px; border: 0; border-bottom: 1px solid #e1e8e2; background: transparent; color: #183b2b; cursor: pointer; font-weight: 650; text-align: left; }
+.settings-row span { display: inline-flex; min-width: 0; align-items: center; gap: 12px; }
+.settings-row svg { flex: 0 0 auto; color: #557968; }
+.settings-danger { margin-top: 42px; }
+.settings-danger p { max-width: 34ch; margin: 0 0 14px; color: #60746a; font-size: .92rem; line-height: 1.5; }
+.settings-row-danger { color: #9b3e2f; }.settings-row-danger svg { color: currentColor; }
+.information-copy { max-width: 40ch; color: #42584b; font-size: 1.05rem; line-height: 1.62; }
+.information-copy p { margin: 0 0 20px; }
+.information-contact { margin-top: 12px; text-decoration: none; }
+@media (max-width: 370px) { .page-topbar { margin-bottom: 38px; }.page-topbar h1 { font-size: 1.8rem; } }
