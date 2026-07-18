@@ -21,7 +21,7 @@ test('contains the exact thirteen-minute core practice contract', () => {
   const intermediate = getPracticesByLevel('intermediate')
   const core = intermediate.find((practice) => practice.id === 'core-back')
 
-  expect(intermediate).toHaveLength(2)
+  expect(intermediate).toHaveLength(3)
   expect(core?.steps.map(({ id, title, durationSeconds }) => ({ id, title, durationSeconds }))).toEqual([
     { id: 'core-preparation', title: 'Подготовка', durationSeconds: 30 },
     { id: 'core-cat-cow', title: 'Кошка-корова', durationSeconds: 90 },
@@ -46,7 +46,7 @@ test('contains the complete fifteen-minute intermediate practice', () => {
   const intermediatePractices = getPracticesByLevel('intermediate')
   const [practice] = intermediatePractices
 
-  expect(getPracticesByLevel('intermediate')).toHaveLength(2)
+  expect(getPracticesByLevel('intermediate')).toHaveLength(3)
   expect(practice.id).toBe('strength-mobility')
   expect(practice.level).toBe('intermediate')
   expect(practice.title).toBe('15 минут: сила и подвижность')
@@ -83,11 +83,26 @@ test('keeps every practice assigned to an available level', () => {
   expect(practices.every((practice) => practice.level === 'beginner' || practice.level === 'intermediate')).toBe(true)
 })
 
-test('starts and finishes every practice with the expected boundary steps', () => {
-  for (const practice of practices) {
+test('starts and finishes established practices with the expected boundary steps', () => {
+  for (const practice of practices.filter((item) => item.id !== 'gym-warmup')) {
     expect(practice.steps[0]).toMatchObject({ title: 'Подготовка', durationSeconds: 30 })
     expect(practice.steps.at(-1)).toMatchObject({ title: 'Завершение практики' })
   }
+})
+
+test('contains the approved fifteen-minute gym warmup without boundary steps', () => {
+  const practice = practices.find((item) => item.id === 'gym-warmup')
+
+  expect(practice).toMatchObject({
+    level: 'intermediate',
+    title: '15 минут: разминка в спортзале',
+    subtitle: 'Динамическая подготовка перед тренировкой',
+    accent: 'sage',
+  })
+  expect(practice?.steps).toHaveLength(15)
+  expect(practice?.steps.every((step) => step.durationSeconds === 60)).toBe(true)
+  expect(practice?.steps.reduce((sum, step) => sum + step.durationSeconds, 0)).toBe(900)
+  expect(practice?.steps.map((step) => step.title)).not.toEqual(expect.arrayContaining(['Подготовка', 'Завершение практики']))
 })
 
 test('keeps the approved two-minute side plank as the only extended exercise', () => {

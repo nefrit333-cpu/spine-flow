@@ -294,3 +294,27 @@ for (const { id: presenter, name } of coreBackPresenters) {
     await expect(page.getByText('Практика завершена', { exact: true })).toBeVisible()
   })
 }
+
+for (const { id: presenter, name } of coreBackPresenters) {
+  test(`opens the gym warmup with ${presenter} images`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto('/')
+    await acknowledgeSafety(page)
+    await selectPresenter(page, name)
+    await page.getByRole('button', { name: /Средний/ }).click()
+    await page.getByRole('button', { name: '15 минут: разминка в спортзале' }).click()
+
+    const visual = page.locator('.practice-visual img').last()
+    await expect(page.getByText('Шаг 1 из 15', { exact: true })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Ходьба на месте с махами рук' })).toBeVisible()
+    await expect(visual).toHaveAttribute('src', `/images/${presenter}/gym-warmup-march.webp`)
+    await expectImageLoaded(visual)
+    await expectInViewport(page, visual)
+
+    await page.getByRole('button', { name: 'Следующий шаг' }).click()
+    await expect(page.getByRole('heading', { name: 'Повороты головы' })).toBeVisible()
+    await expect(visual).toHaveAttribute('src', `/images/${presenter}/gym-warmup-neck-turns.webp`)
+    await expectImageLoaded(visual)
+    await page.screenshot({ path: `output/playwright/spine-flow-gym-warmup-${presenter}-375.png`, fullPage: false, scale: 'css' })
+  })
+}

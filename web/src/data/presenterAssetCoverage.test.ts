@@ -17,3 +17,18 @@ test('has a presenter-specific PNG for every resolved practice illustration', ()
 
   expect(missing).toEqual([])
 })
+
+test('has gym warmup images for both presenters', () => {
+  const ids = [
+    'gym-warmup-march', 'gym-warmup-neck-turns', 'gym-warmup-shoulder-shrugs',
+    'gym-warmup-shoulder-circles', 'gym-warmup-arm-swings', 'gym-warmup-chest-open',
+    'gym-warmup-arm-circles', 'gym-warmup-torso-turns', 'gym-warmup-hip-hinge-reach',
+    'gym-warmup-hip-circles', 'gym-warmup-hip-openers', 'gym-warmup-leg-swings',
+    'gym-warmup-side-lunge-warmup', 'gym-warmup-reverse-lunge-reach', 'gym-warmup-squat-calf-raise',
+  ]
+  const missing = ids.flatMap((id) => presenters
+    .map((presenter) => `public${getStepImage(id, presenter)}`)
+    .filter((path) => !existsSync(resolve(path))))
+
+  expect(missing).toEqual([])
+})
