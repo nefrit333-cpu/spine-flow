@@ -154,6 +154,9 @@ test('shows the revised male neck poses without clipping', async ({ page }) => {
   await page.getByRole('button', { name: /Начинающий/ }).click()
   await page.getByRole('button', { name: 'Начать' }).click()
 
+  const closeButton = page.getByRole('button', { name: 'Закрыть практику' })
+  await expect.poll(async () => (await closeButton.boundingBox())?.y ?? 0).toBeGreaterThanOrEqual(56)
+
   for (let step = 0; step < 3; step += 1) {
     await page.getByRole('button', { name: 'Следующий шаг' }).click()
   }
