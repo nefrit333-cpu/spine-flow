@@ -345,3 +345,31 @@ for (const { id: presenter, name } of coreBackPresenters) {
     await page.screenshot({ path: `output/playwright/spine-flow-band-shoulders-${presenter}-375.png`, fullPage: false, scale: 'css' })
   })
 }
+
+for (const width of [375, 390, 430]) {
+  test(`keeps the practice header below the iPhone status area at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 })
+    await page.addInitScript(() => {
+      localStorage.setItem('spine-flow-presenter', 'female')
+      localStorage.setItem('spine-flow.safety', 'true')
+    })
+    await page.goto('/#/practice/intermediate/gym-warmup')
+
+    const practicePage = page.locator('.practice-page')
+    const closeButton = page.getByRole('button', { name: 'Закрыть практику' })
+    const stepLabel = page.getByText('Шаг 1 из 15', { exact: true })
+
+    await expect(practicePage).toBeVisible()
+    await expect.poll(() => practicePage.evaluate((element) => (
+      Number.parseFloat(getComputedStyle(element).paddingTop)
+    ))).toBeGreaterThanOrEqual(84)
+    await expectInViewport(page, closeButton)
+    await expectInViewport(page, stepLabel)
+
+    for (const locator of [closeButton, stepLabel]) {
+      const box = await locator.boundingBox()
+      expect(box).not.toBeNull()
+      expect(box!.y).toBeGreaterThanOrEqual(84)
+    }
+  })
+}
